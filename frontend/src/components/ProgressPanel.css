@@ -1,0 +1,354 @@
+.progress-panel {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.progress-header-section {
+  padding: 20px 24px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color 0.2s ease;
+}
+
+.progress-header-section:hover {
+  background: #e9ecef;
+}
+
+.progress-title {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.3rem;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.progress-icon {
+  font-size: 1.4rem;
+}
+
+.progress-status {
+  font-size: 0.8rem;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.progress-status.active {
+  background: #fff3cd;
+  color: #856404;
+  animation: pulse 2s infinite;
+}
+
+.progress-status.completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+.expand-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.expand-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.progress-content {
+  padding: 24px;
+}
+
+.progress-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6c757d;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.empty-icon + h3 {
+  margin: 0 0 16px 0;
+  color: #495057;
+}
+
+.empty-icon + h3 + p {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* Progress Overview */
+.progress-overview {
+  margin-bottom: 32px;
+}
+
+.progress-bar-container {
+  margin-bottom: 24px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: #495057;
+  font-weight: 500;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #007bff, #0056b3);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.plan-overview h4 {
+  margin: 0 0 16px 0;
+  color: #2c3e50;
+  font-size: 1.1rem;
+}
+
+.plan-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.plan-item {
+  padding: 8px 12px;
+  margin: 4px 0;
+  border-radius: 6px;
+  background: #f8f9fa;
+  color: #6c757d;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  position: relative;
+  padding-left: 40px;
+}
+
+.plan-item::before {
+  content: '○';
+  position: absolute;
+  left: 12px;
+  color: #dee2e6;
+  font-weight: bold;
+}
+
+.plan-item.completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.plan-item.completed::before {
+  content: '✓';
+  color: #28a745;
+}
+
+.plan-item.current {
+  background: #e7f3ff;
+  color: #0c5460;
+  border-left: 3px solid #007bff;
+}
+
+.plan-item.current::before {
+  content: '→';
+  color: #007bff;
+}
+
+/* Checkpoints Section */
+.checkpoints-section h4 {
+  margin: 0 0 20px 0;
+  color: #2c3e50;
+  font-size: 1.1rem;
+}
+
+.checkpoints-timeline {
+  position: relative;
+}
+
+.checkpoint-item {
+  display: flex;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.checkpoint-item:last-child .checkpoint-line {
+  display: none;
+}
+
+.checkpoint-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 16px;
+  position: relative;
+}
+
+.checkpoint-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #dee2e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  z-index: 1;
+}
+
+.checkpoint-item.completed .checkpoint-icon {
+  border-color: #28a745;
+  background: #d4edda;
+}
+
+.checkpoint-item.in-progress .checkpoint-icon {
+  border-color: #007bff;
+  background: #e7f3ff;
+  animation: pulse 2s infinite;
+}
+
+.checkpoint-item.error .checkpoint-icon {
+  border-color: #dc3545;
+  background: #f8d7da;
+}
+
+.checkpoint-line {
+  width: 2px;
+  height: 40px;
+  background: #dee2e6;
+  margin-top: 4px;
+}
+
+.checkpoint-item.completed .checkpoint-line {
+  background: #28a745;
+}
+
+.checkpoint-item.in-progress .checkpoint-line {
+  background: #007bff;
+}
+
+.checkpoint-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.checkpoint-header {
+  margin-bottom: 8px;
+}
+
+.checkpoint-title {
+  margin: 0 0 4px 0;
+  color: #2c3e50;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.checkpoint-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.8rem;
+}
+
+.checkpoint-status {
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.checkpoint-time {
+  color: #6c757d;
+}
+
+.checkpoint-details {
+  margin: 8px 0;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #495057;
+  line-height: 1.4;
+}
+
+.checkpoint-agent {
+  margin-top: 8px;
+}
+
+.agent-badge {
+  background: #e9ecef;
+  color: #495057;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.checkpoint-item.completed .agent-badge {
+  background: #d4edda;
+  color: #155724;
+}
+
+.checkpoint-item.in-progress .agent-badge {
+  background: #e7f3ff;
+  color: #0c5460;
+}
+
+.checkpoint-item.error .agent-badge {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .progress-content {
+    padding: 16px;
+  }
+  
+  .checkpoint-meta {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .plan-item {
+    font-size: 0.85rem;
+  }
+  
+  .checkpoint-title {
+    font-size: 0.95rem;
+  }
+}
