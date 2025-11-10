@@ -13,6 +13,7 @@ This project is a **Code Review Tool** built using **React**, **TypeScript**, an
 ### Prerequisites
 - Node.js (v16 or higher)
 - npm (v7 or higher)
+- AWS CLI (for Bedrock integration)
 
 ### Installation
 1. Clone the repository:
@@ -32,7 +33,7 @@ This project is a **Code Review Tool** built using **React**, **TypeScript**, an
 ### Running the Application
 1. Start the backend server:
    ```bash
-   npm run dev
+   cd backend && npm run dev
    ```
 2. Start the frontend development server:
    ```bash
@@ -85,16 +86,22 @@ export default router;
 AWS Bedrock allows you to integrate generative AI models into your application. Follow these steps to deploy this project to AWS Bedrock:
 
 ### Setting Up Bedrock Agents
-1. Log in to the AWS Management Console.
-2. Navigate to **Bedrock** and create a new agent.
-3. Configure the agent with the required permissions and settings.
-4. Deploy the agent to your desired region.
+1. Install the AWS SDK for JavaScript:
+   ```bash
+   npm install @aws-sdk/client-bedrock
+   ```
+2. Log in to the AWS Management Console.
+3. Navigate to **Bedrock** and create a new agent.
+4. Configure the agent with the required permissions and settings.
+5. Deploy the agent to your desired region.
 
 ### Switching Models
 To switch models in AWS Bedrock, use the API mode:
 
 1. Update the model configuration in your application:
    ```typescript
+   import { BedrockClient } from '@aws-sdk/client-bedrock';
+
    const bedrockClient = new BedrockClient({ region: 'us-east-1' });
    const modelConfig = {
      modelId: 'your-model-id',
@@ -115,8 +122,21 @@ To switch models in AWS Bedrock, use the API mode:
    ```bash
    cd frontend && npm run build
    ```
-2. Deploy the backend and frontend to AWS services (e.g., EC2, S3, API Gateway).
+2. Deploy the backend and frontend to AWS services:
+   - Use **EC2** for the backend.
+   - Use **S3** and **CloudFront** for the frontend.
+   - Use **API Gateway** for managing API endpoints.
 3. Update the webhook URL in GitHub to point to the deployed backend.
+
+### Additional Notes for Beginners
+- **What is AWS Bedrock?**
+  AWS Bedrock is a service that allows you to use generative AI models without managing the underlying infrastructure. It supports multiple models and provides APIs for easy integration.
+
+- **Why use Bedrock?**
+  Bedrock simplifies the process of using AI models in your application. You can switch between models and regions easily, making it flexible for different use cases.
+
+- **How to test the integration?**
+  Use the AWS CLI or Postman to send requests to your deployed application and verify the responses.
 
 ## Contributing
 Contributions are welcome! Please fork the repository and submit a pull request.
