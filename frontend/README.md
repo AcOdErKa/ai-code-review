@@ -116,6 +116,127 @@ router.post('/webhook', (req, res) => {
 export default router;
 ```
 
+### Adding a Webhook to Post Review Comments on Pull Requests
+
+To enable the application to post review comments on pull requests, follow these steps:
+
+1. **Create a Webhook Endpoint**:
+   Add the following code to your backend server to handle GitHub webhook events:
+
+   ```typescript
+   app.post("/webhook", async (req, res) => {
+     const event = req.headers["x-github-event"];
+     const payload = req.body;
+
+     console.log(`[INFO] Received GitHub webhook event: ${event}`);
+
+     if (event === "pull_request") {
+       const action = payload.action;
+       const pullRequest = payload.pull_request;
+       const repo = payload.repository;
+
+       if (action === "opened" || action === "synchronize") {
+         console.log(`[INFO] Pull request #${pullRequest.number} opened or updated in ${repo.full_name}`);
+
+         // Perform code review (mocked for now)
+         const reviewComment = `### Code Review Results\n\n- Code quality: Good\n- Issues found: None\n- Suggestions: Keep up the good work!`;
+
+         try {
+           // Post a comment on the pull request
+           const response = await fetch(
+             `https://api.github.com/repos/${repo.full_name}/issues/${pullRequest.number}/comments`,
+             {
+               method: "POST",
+               headers: {
+                 Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+                 Accept: "application/vnd.github.v3+json",
+               },
+               body: JSON.stringify({ body: reviewComment }),
+             }
+           );
+
+           if (response.ok) {
+             console.log(`[INFO] Successfully posted review comment on PR #${pullRequest.number}`);
+             res.status(200).json({ message: "Review comment posted successfully" });
+           } else {
+             const error = await response.json();
+             console.error(`[ERROR] Failed to post review comment: ${error.message}`);
+             res.status(500).json({ error: "Failed to post review comment" });
+           }
+         } catch (error) {
+           console.error(`[ERROR] Exception while posting review comment: ${error.message}`);
+           res.status(500).json({ error: "Exception while posting review comment" });
+         }
+       } else {
+         console.log(`[INFO] Ignored pull request action: ${action}`);
+         res.status(200).json({ message: "Ignored action" });
+       }
+     } else {
+       console.log(`[INFO] Unsupported event type: ${event}`);
+       res.status(400).json({ error: "Unsupported event type" });
+     }
+   });
+   ```
+2. **Modify the publisher Function**:
+Update the publisher function in graph.ts to include logic for posting the review to GitHub:
+```
+const publisher = async (state: AgentState): Promise<Partial<AgentState>> => {
+  const repoFull = `${state.owner}/${state.repo}@${state.branch}`;
+
+  // Save the review to the database
+  saveReview(state.userId, repoFull, state.commitHash, state.review);
+
+  // Post the review as a comment on the pull request
+  try {
+    const response = await fetch(
+      `https://api.github.com/repos/${state.owner}/${state.repo}/issues/${state.commitHash}/comments`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+          Accept: "application/vnd.github.v3+json",
+        },
+        body: JSON.stringify({ body: state.review }),
+      }
+    );
+
+    if (response.ok) {
+      console.log(`[INFO] Successfully posted review comment on PR for commit ${state.commitHash}`);
+    } else {
+      const error = await response.json();
+      console.error(`[ERROR] Failed to post review comment: ${error.message}`);
+    }
+  } catch (error) {
+    console.error(`[ERROR] Exception while posting review comment: ${error.message}`);
+  }
+
+  return { logs: [...state.logs, "Saved to history and posted review to PR."] };
+};
+```
+
+3. **Set Up the Webhook in GitHub**:
+   - Go to your GitHub repository.
+   - Navigate to **Settings > Webhooks**.
+   - Click **Add webhook**.
+   - Enter the payload URL (e.g., `http://your-server-url/webhook`).
+   - Choose **application/json** as the content type.
+   - Select the **Pull Request** event.
+   - Click **Add webhook**.
+
+3. **Environment Variables**:
+   - Ensure you have a GitHub personal access token with `repo` permissions.
+   - Add the token to your `.env` file:
+     ```env
+     GITHUB_TOKEN=your_personal_access_token
+     ```
+
+4. **Test the Webhook**:
+   - Open or update a pull request in your repository.
+   - Check the server logs to ensure the webhook is received.
+   - Verify that the review comment is posted on the pull request.
+
+This setup allows the application to intelligently post review comments on pull requests, enhancing the code review process.
+
 ---
 
 ## Deploying to AWS Bedrock
