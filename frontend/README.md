@@ -179,7 +179,7 @@ To enable the application to post review comments on pull requests, follow these
    ```
 2. **Modify the publisher Function**:
 Update the publisher function in graph.ts to include logic for posting the review to GitHub:
-```
+```typescript
 const publisher = async (state: AgentState): Promise<Partial<AgentState>> => {
   const repoFull = `${state.owner}/${state.repo}@${state.branch}`;
 
